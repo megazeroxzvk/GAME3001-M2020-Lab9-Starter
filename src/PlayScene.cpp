@@ -15,7 +15,12 @@ void PlayScene::draw()
 {
 	drawDisplayList();
 
-	Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position);
+	//Lab 9---------------------------
+	if (m_debugModeToggle)
+	{
+		Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position);
+	}
+	
 }
 
 void PlayScene::update()
@@ -122,10 +127,41 @@ void PlayScene::handleEvents()
 	{
 		TheGame::Instance()->changeSceneState(END_SCENE);
 	}
+
+
+	//Lab 9---------------------------
+	//if(EventManager::Instance().isKeyUp(SDL_SCANCODE_H))		//faulty
+	//Comments - not so great, but acceptable.
+	if(!m_HPressedCheck)
+	{
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_H))
+		{
+			m_debugModeToggle = !m_debugModeToggle;
+			m_HPressedCheck = true;
+
+			m_debugModeToggle ?
+				std::cout << "Debug Mode Started" << std::endl
+				:
+				std::cout << "Debug Mode Stopped" << std::endl;
+		}
+	}
+
+	if(EventManager::Instance().isKeyUp(SDL_SCANCODE_H))
+	{
+		m_HPressedCheck = false;
+	}
+
+	
+	
 }
 
 void PlayScene::start()
 {
+
+	//Lab 9---------------------------
+	m_debugModeToggle = false;
+	m_HPressedCheck = false;
+	
 	// Plane Sprite
 	m_pPlaneSprite = new Plane();
 	addChild(m_pPlaneSprite);

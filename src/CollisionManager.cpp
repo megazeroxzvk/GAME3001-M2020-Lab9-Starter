@@ -217,7 +217,8 @@ bool CollisionManager::LOSCheck(DisplayObject* from, DisplayObject* to, DisplayO
 
 	if (lineRectCheck(lineStart, lineEnd, boxStart, boxWidth, boxHeight))
 	{
-		std::cout << "No LOS - Collision with Obstacle!" << std::endl;
+		//Lab 9---------------------------
+		//std::cout << "No LOS - Collision with Obstacle!" << std::endl;
 		
 		return false;
 	}
