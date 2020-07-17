@@ -19,6 +19,17 @@ void PlayScene::draw()
 	if (m_debugModeToggle)
 	{
 		Util::DrawLine(m_pPlayer->getTransform()->position, m_pPlaneSprite->getTransform()->position);
+
+		Util::DrawRect(m_pPlayer->getTransform()->position - glm::vec2(m_pPlayer->getWidth() * 0.5, m_pPlayer->getHeight() * 0.5),
+			m_pPlayer->getWidth(), m_pPlayer->getHeight());
+
+		Util::DrawRect(m_pObstacle->getTransform()->position - glm::vec2(m_pObstacle->getWidth() * 0.5, m_pObstacle->getHeight() * 0.5),
+			m_pObstacle->getWidth(), m_pObstacle->getHeight());
+
+		
+		Util::DrawRect(m_pPlaneSprite->getTransform()->position - glm::vec2(m_pPlaneSprite->getWidth() * 0.5, m_pPlaneSprite->getHeight() * 0.5),
+			m_pPlaneSprite->getWidth(), m_pPlaneSprite->getHeight());
+		
 	}
 	
 }
@@ -28,6 +39,10 @@ void PlayScene::update()
 	updateDisplayList();
 
 	CollisionManager::LOSCheck(m_pPlayer, m_pPlaneSprite, m_pObstacle);
+
+	//Lab 9---------------------------
+	CollisionManager::AABBCheck(m_pPlayer, m_pPlaneSprite);
+	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle);
 }
 
 void PlayScene::clean()
