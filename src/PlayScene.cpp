@@ -14,7 +14,7 @@ PlayScene::~PlayScene()
 void PlayScene::draw()
 {
 	drawDisplayList();
-
+	
 	//Lab 9---------------------------
 	if (m_debugModeToggle)
 	{
@@ -29,7 +29,8 @@ void PlayScene::draw()
 		
 		Util::DrawRect(m_pPlaneSprite->getTransform()->position - glm::vec2(m_pPlaneSprite->getWidth() * 0.5, m_pPlaneSprite->getHeight() * 0.5),
 			m_pPlaneSprite->getWidth(), m_pPlaneSprite->getHeight());
-		
+		m_displayGrid();			//display our nice grid of tilemap set and tile nodes
+		m_displayGridLOS();			//display the grids and their lines IF NO LOS !!!!
 	}
 	
 }
@@ -43,6 +44,7 @@ void PlayScene::update()
 	//Lab 9---------------------------
 	CollisionManager::AABBCheck(m_pPlayer, m_pPlaneSprite);
 	CollisionManager::AABBCheck(m_pPlayer, m_pObstacle);
+	m_setGridLOS();
 }
 
 void PlayScene::clean()
@@ -204,10 +206,68 @@ void PlayScene::handleEvents()
 	
 }
 
+
+//Lab 9---------------------------
+void PlayScene::m_buildGrid()
+{
+	//Logic to add the pathnodes to overall scene/s
+	for (int row = 0; row < Config::ROW_NUM; ++row)
+	{
+		for (int col = 0; col < Config::COL_NUM; ++col)
+		{
+			auto pathNode = new PathNode();
+			pathNode->getTransform()->position = glm::vec2(pathNode->getWidth() * col + Config::TILE_SIZE*0.5,pathNode->getHeight() * row + Config::TILE_SIZE * 0.5);
+			m_pGrid.push_back(pathNode);
+		}
+	}
+}
+
+//Lab 9---------------------------
+void PlayScene::m_displayGrid()
+{
+	//Logic to add the pathnodes to overall scene/s
+	for (int row = 0; row < Config::ROW_NUM; ++row)
+	{
+		for (int col = 0; col < Config::COL_NUM; ++col)
+		{
+			//Actual TileMap grid
+			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position - glm::vec2(m_pGrid[row * Config::COL_NUM + col]->getWidth() * 0.5f, 
+				m_pGrid[row * Config::COL_NUM + col]->getHeight() * 0.5f),
+				40, 40);
+
+			//CenterPoint for those TileMap grid for doing various AI functions, PF
+			Util::DrawRect(m_pGrid[row * Config::COL_NUM + col]->getTransform()->position, 5, 5);
+		}
+	}
+}
+
+//Lab 9---------------------------
+void PlayScene::m_displayGridLOS()
+{
+	for (auto* node : m_pGrid)
+	{
+		if(!node->getLineOfSight())
+		{
+			Util::DrawLine(node->getTransform()->position, m_pPlayer->getTransform()->position, glm::vec4(1, 0, 0, 1.0f));
+		}
+		
+	}
+}
+
+//Lab 9---------------------------
+void PlayScene::m_setGridLOS()
+{
+	//for each node set a line
+	for (auto* node : m_pGrid)
+	{
+		node->setLineOfSight(CollisionManager::LOSCheck(node, m_pPlayer, m_pObstacle));
+	}
+}
+
 void PlayScene::start()
 {
-
 	//Lab 9---------------------------
+	m_buildGrid();
 	m_debugModeToggle = false;
 	//m_HPressedCheck = false;
 	
@@ -226,3 +286,5 @@ void PlayScene::start()
 	addChild(m_pObstacle);
 	
 }
+
+

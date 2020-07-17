@@ -8,6 +8,7 @@
 #include "Button.h"
 #include "Obstacle.h"
 #include  "DebugKeys.h"
+#include "PathNode.h"
 
 class PlayScene : public Scene
 {
@@ -22,6 +23,16 @@ public:
 	virtual void handleEvents() override;
 	virtual void start() override;
 private:
+	//Private Method
+
+	//Lab 9---------------------------
+	void m_buildGrid();
+	void m_displayGrid();
+
+	//Lab 9---------------------------
+	void m_displayGridLOS();
+	void m_setGridLOS();
+	
 	glm::vec2 m_mousePosition;
 
 	Plane* m_pPlaneSprite;
@@ -31,6 +42,9 @@ private:
 	Obstacle* m_pObstacle;
 
 	//Lab 9---------------------------
+	std::vector<PathNode*> m_pGrid;
+
+	
 	bool m_debugModeToggle;			//not putting datatype in variable name
 	bool m_patrolModeToggle;
 
