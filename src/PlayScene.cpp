@@ -132,24 +132,58 @@ void PlayScene::handleEvents()
 	//Lab 9---------------------------
 	//if(EventManager::Instance().isKeyUp(SDL_SCANCODE_H))		//faulty
 	//Comments - not so great, but acceptable.
-	if(!m_HPressedCheck)
+	//DEBUG - H KEY
+	if(!m_debugKeys[H_KEY])
 	{
 		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_H))
 		{
 			m_debugModeToggle = !m_debugModeToggle;
-			m_HPressedCheck = true;
+			m_debugKeys[H_KEY] = true;
 
 			m_debugModeToggle ?
-				std::cout << "Debug Mode Started" << std::endl
+				std::cout << "DEBUG: Debug Mode Started" << std::endl
 				:
-				std::cout << "Debug Mode Stopped" << std::endl;
+				std::cout << "DEBUG: Debug Mode Stopped" << std::endl;
 		}
 	}
-
 	if(EventManager::Instance().isKeyUp(SDL_SCANCODE_H))
 	{
-		m_HPressedCheck = false;
+		m_debugKeys[H_KEY] = false;
 	}
+
+	//K KEY
+	if(!m_debugKeys[K_KEY])
+	{
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_K))
+		{
+			m_debugKeys[K_KEY] = true;
+			std::cout << "DEBUG: Enemy Damaged" << std::endl;
+		}
+	}
+	if (EventManager::Instance().isKeyUp(SDL_SCANCODE_K))
+	{
+		m_debugKeys[K_KEY] = false;
+	}
+
+	//P KEY
+	if (!m_debugKeys[P_KEY])
+	{
+		if (EventManager::Instance().isKeyDown(SDL_SCANCODE_P))
+		{
+			m_patrolModeToggle = !m_patrolModeToggle;
+			m_debugKeys[P_KEY] = true;
+
+			m_patrolModeToggle ?
+				std::cout << "DEBUG: Patrol Mode Started" << std::endl
+				:
+				std::cout << "DEBUG: Patrol Mode Stopped" << std::endl;
+		}
+	}
+	if (EventManager::Instance().isKeyUp(SDL_SCANCODE_P))
+	{
+		m_debugKeys[P_KEY] = false;
+	}
+	
 
 	
 	
@@ -160,7 +194,8 @@ void PlayScene::start()
 
 	//Lab 9---------------------------
 	m_debugModeToggle = false;
-	m_HPressedCheck = false;
+	//m_HPressedCheck = false;
+	
 	
 	// Plane Sprite
 	m_pPlaneSprite = new Plane();
